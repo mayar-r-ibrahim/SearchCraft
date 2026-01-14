@@ -1,0 +1,1897 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SearchCraft - Multi-Engine Search Tool</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .logo i {
+            color: #4285f4;
+            font-size: 2.5rem;
+        }
+        
+        h1 {
+            color: #202124;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #5f6368;
+            font-size: 1rem;
+        }
+        
+        /* Tab System */
+        .tab-container {
+            margin-bottom: 30px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .tab-btn {
+            flex: 1;
+            min-width: 200px;
+            padding: 15px 20px;
+            background-color: white;
+            border: 2px solid #e8eaed;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .tab-btn:hover {
+            background-color: #f1f3f4;
+            border-color: #dadce0;
+        }
+        
+        .tab-btn.active {
+            background-color: #e8f0fe;
+            border-color: #1a73e8;
+            color: #1a73e8;
+        }
+        
+        .tab-content {
+            display: none;
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Normal Search Tab */
+        .normal-search-container {
+            text-align: center;
+        }
+        
+        .search-input-container {
+            position: relative;
+            margin-bottom: 25px;
+        }
+        
+        .main-search-input {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 1.2rem;
+            border: 2px solid #dadce0;
+            border-radius: 24px;
+            transition: all 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .main-search-input:focus {
+            outline: none;
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.2);
+        }
+        
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #5f6368;
+            font-size: 1.2rem;
+        }
+        
+        .quick-search-engines {
+            margin-top: 30px;
+        }
+        
+        .quick-search-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #5f6368;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .search-engine-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .engine-btn-quick {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 15px 10px;
+            background-color: #f8f9fa;
+            border: 2px solid #e8eaed;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        
+        .engine-btn-quick:hover {
+            background-color: #f1f3f4;
+            border-color: #dadce0;
+            transform: translateY(-2px);
+        }
+        
+        .engine-btn-quick:active {
+            transform: translateY(0);
+        }
+        
+        .engine-icon-quick {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            color: #5f6368;
+        }
+        
+        .engine-name-quick {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #3c4043;
+        }
+        
+        .all-search-btn-quick {
+            background-color: #34a853;
+            color: white;
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .all-search-btn-quick:hover {
+            background-color: #2e8b47;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(52, 168, 83, 0.3);
+        }
+        
+        /* Advanced Search Tab */
+        .container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+        
+        @media (max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .search-builder {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        .preview-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .search-preview {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            flex-grow: 1;
+        }
+        
+        .operator-guide {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        h2 {
+            color: #1a73e8;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e8f0fe;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        h2 i {
+            font-size: 1.4rem;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #f1f3f4;
+        }
+        
+        .section:last-child {
+            border-bottom: none;
+        }
+        
+        .section-title {
+            font-weight: 600;
+            color: #5f6368;
+            margin-bottom: 12px;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .info-icon {
+            color: #1a73e8;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+        
+        .info-icon:hover {
+            color: #0d62d9;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #3c4043;
+        }
+        
+        .input-with-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .input-with-info input, 
+        .input-with-info select {
+            flex-grow: 1;
+        }
+        
+        input[type="text"],
+        input[type="url"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+        }
+        
+        .operator-explanation {
+            background-color: #f8f9fa;
+            border-left: 4px solid #34a853;
+            padding: 12px 15px;
+            margin-top: 10px;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.9rem;
+            display: none;
+        }
+        
+        .operator-explanation.active {
+            display: block;
+        }
+        
+        .explanation-title {
+            font-weight: 600;
+            color: #34a853;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .explanation-example {
+            background-color: #e8f0fe;
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-top: 8px;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+        
+        .preview-box {
+            background-color: #f8f9fa;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            min-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .query-display {
+            font-family: monospace;
+            font-size: 1rem;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        
+        .operator-tag {
+            display: inline-block;
+            background-color: #e8f0fe;
+            color: #1a73e8;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin: 2px 0;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        button {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .search-btn {
+            background-color: #1a73e8;
+            color: white;
+            flex: 2;
+        }
+        
+        .search-btn:hover {
+            background-color: #0d62d9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(26, 115, 232, 0.3);
+        }
+        
+        .reset-btn {
+            background-color: #f1f3f4;
+            color: #3c4043;
+            flex: 1;
+        }
+        
+        .reset-btn:hover {
+            background-color: #e8eaed;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            color: #5f6368;
+            font-size: 0.9rem;
+        }
+        
+        .tip {
+            background-color: #fef7e0;
+            border-left: 4px solid #fbbc04;
+            padding: 12px 15px;
+            margin-top: 15px;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.9rem;
+        }
+        
+        .wildcard-type-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .wildcard-type-selector button {
+            flex: 1;
+            padding: 10px;
+            font-size: 0.9rem;
+            background-color: #f1f3f4;
+            color: #3c4043;
+        }
+        
+        .wildcard-type-selector button.active {
+            background-color: #1a73e8;
+            color: white;
+        }
+        
+        .wildcard-preview {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .guide-item {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #f1f3f4;
+        }
+        
+        .guide-item:last-child {
+            border-bottom: none;
+        }
+        
+        .guide-operator {
+            font-weight: bold;
+            color: #1a73e8;
+            margin-bottom: 5px;
+        }
+        
+        .guide-desc {
+            color: #5f6368;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+        
+        .guide-example {
+            background-color: #f1f3f4;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 25px;
+            border-radius: 12px;
+            width: 80%;
+            max-width: 700px;
+            max-height: 80%;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .close-modal {
+            color: #5f6368;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .close-modal:hover {
+            color: #000;
+        }
+        
+        .wildcard-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        @media (max-width: 768px) {
+            .tab-btn {
+                min-width: 150px;
+            }
+            
+            .search-engine-buttons {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            
+            .wildcard-options {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .search-engine-info {
+            background-color: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            display: none;
+        }
+        
+        .search-engine-info.active {
+            display: block;
+        }
+        
+        .engine-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 8px;
+        }
+        
+        .feature-tag {
+            background-color: #e8f0fe;
+            color: #1a73e8;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .feature-tag.supported {
+            background-color: #e6f4ea;
+            color: #137333;
+        }
+        
+        .feature-tag.partial {
+            background-color: #fef7e0;
+            color: #b06000;
+        }
+        
+        .feature-tag.unsupported {
+            background-color: #fce8e6;
+            color: #c5221f;
+        }
+        
+        .quick-instructions {
+            background-color: #f1f8ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border-left: 4px solid #1a73e8;
+        }
+        
+        .quick-instructions h3 {
+            color: #1a73e8;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .mode-switch {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 15px;
+        }
+        
+        .mode-switch-btn {
+            background-color: #f1f3f4;
+            color: #5f6368;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .mode-switch-btn:hover {
+            background-color: #e8eaed;
+        }
+        
+        /* Mobile responsiveness */
+        @media (max-width: 600px) {
+            .tab-btn {
+                min-width: 100%;
+            }
+            
+            .search-engine-buttons {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <i class="fas fa-search"></i>
+            <div>
+              <h1>SearchCraft</h1>
+	      <p class="subtitle">Simple search or build advanced queries for 12 different search engines</p>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Tab Navigation -->
+    <div class="tab-container">
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="normal-search">
+                <i class="fas fa-search"></i> Normal Search
+            </button>
+            <button class="tab-btn" data-tab="advanced-search">
+                <i class="fas fa-sliders-h"></i> Advanced Search
+            </button>
+        </div>
+        
+        <!-- Normal Search Tab -->
+        <div class="tab-content active" id="normal-search-tab">
+            <div class="normal-search-container">
+                <div class="quick-instructions">
+                    <h3><i class="fas fa-lightbulb"></i> Quick Search</h3>
+                    <p>Enter your search terms below and click any search engine button to search instantly.</p>
+                </div>
+                
+                <div class="search-input-container">
+                    <input type="text" 
+                           class="main-search-input" 
+                           id="main-search-input" 
+                           placeholder="What would you like to search for?">
+                    <div class="search-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                </div>
+                
+                <div class="quick-search-engines">
+                    <div class="quick-search-title">Search with:</div>
+                    <div class="search-engine-buttons" id="quick-search-engine-buttons">
+                        <!-- Quick search buttons will be added by JavaScript -->
+                    </div>
+                    
+                    <button class="all-search-btn-quick" id="quick-all-search-btn">
+                        <i class="fas fa-external-link-alt"></i> Open All 12 Search Engines
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Advanced Search Tab -->
+        <div class="tab-content" id="advanced-search-tab">
+            <div class="mode-switch">
+                <button class="mode-switch-btn" id="switch-to-normal">
+                    <i class="fas fa-arrow-left"></i> Back to Normal Search
+                </button>
+            </div>
+            
+            <div class="container">
+                <div class="search-builder">
+                    <div class="section">
+                        <div class="section-title">
+                            <span><i class="fas fa-keyboard"></i> Normal Search Terms</span>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="normal-search">Regular Search Keywords</label>
+                            <div class="input-with-info">
+                                <input type="text" id="normal-search" placeholder="e.g., machine learning tutorials">
+                                <i class="fas fa-info-circle info-icon" onclick="toggleExplanation('normal-search-exp')"></i>
+                            </div>
+                            <div class="operator-explanation" id="normal-search-exp">
+                                <div class="explanation-title"><i class="fas fa-info-circle"></i> Normal Search Terms</div>
+                                <p>Enter regular search keywords that will be combined with any advanced operators you specify below. These terms will be searched for in the selected search engine's default way.</p>
+                                <div class="explanation-example">Example: machine learning tutorials</div>
+                                <div class="explanation-example">Example: best restaurants in Paris</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h2><i class="fas fa-sliders-h"></i> Advanced Search Parameters</h2>
+                    
+                    <div class="section">
+                        <div class="section-title">
+                            <span><i class="fas fa-keyboard"></i> Term-Level Operators</span>
+                            <i class="fas fa-info-circle info-icon" onclick="showOperatorInfo('term')"></i>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="exact-phrase">Exact Phrase</label>
+                            <div class="input-with-info">
+                                <input type="text" id="exact-phrase" placeholder='e.g., "to be or not to be"'>
+                                <i class="fas fa-info-circle info-icon" onclick="toggleExplanation('exact-phrase-exp')"></i>
+                            </div>
+                            <div class="operator-explanation" id="exact-phrase-exp">
+                                <div class="explanation-title"><i class="fas fa-info-circle"></i> Exact Phrase Operator</div>
+                                <p>Finds pages containing this exact phrase in this exact order. Use quotes to search for specific phrases.</p>
+                                <div class="explanation-example">Example: "to be or not to be" finds pages with that exact Shakespeare quote</div>
+                                <div class="explanation-example">Example: "machine learning" finds pages with that exact phrase, not just both words separately</div>
+                            </div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="or-terms">OR Terms (separate with comma)</label>
+                            <div class="input-with-info">
+                                <input type="text" id="or-terms" placeholder="e.g., java, python, tutorial">
+                                <i class="fas fa-info-circle info-icon" onclick="toggleExplanation('or-terms-exp')"></i>
+                            </div>
+                            <div class="operator-explanation" id="or-terms-exp">
+                                <div class="explanation-title"><i class="fas fa-info-circle"></i> OR Operator</div>
+                                <p>Finds pages containing any of the specified terms. Must use uppercase OR between terms.</p>
+                                <div class="explanation-example">Example: java OR python tutorial finds pages about either Java tutorials or Python tutorials</div>
+                                <div class="explanation-example">Example: cats OR dogs pets finds pages about either cats or dogs as pets</div>
+                            </div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="exclude-terms">Exclude Terms (separate with comma)</label>
+                            <div class="input-with-info">
+                                <input type="text" id="exclude-terms" placeholder="e.g., car, vehicle, automobile">
+                                <i class="fas fa-info-circle info-icon" onclick="toggleExplanation('exclude-terms-exp')"></i>
+                            </div>
+                            <div class="operator-explanation" id="exclude-terms-exp">
+                                <div class="explanation-title"><i class="fas fa-info-circle"></i> Exclude Operator</div>
+                                <p>Excludes pages containing the specified terms from search results.</p>
+                                <div class="explanation-example">Example: jaguar speed -car finds information about jaguar (animal) speed, not Jaguar cars</div>
+                                <div class="explanation-example">Example: apple -fruit -computer finds pages about Apple Inc. but not about the fruit or computers</div>
+                            </div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="wildcard-type">Wildcard Search Type</label>
+                            <div class="wildcard-type-selector">
+                                <button class="wildcard-btn active" data-type="asterisk">* (Asterisk)</button>
+                                <button class="wildcard-btn" data-type="question">? (Question Mark)</button>
+                                <button class="wildcard-btn" data-type="brackets">[] (Character Set)</button>
+                            </div>
+                            
+                            <div id="wildcard-asterisk" class="wildcard-input">
+                                <label for="asterisk-wildcard">Asterisk Wildcard (* matches any number of characters)</label>
+                                <div class="input-with-info">
+                                    <input type="text" id="asterisk-wildcard" placeholder='e.g., "govern*s" or "a * saved is a * earned"'>
+                                    <i class="fas fa-info-circle info-icon" onclick="toggleExplanation('asterisk-wildcard-exp')"></i>
+                                </div>
+                                <div class="operator-explanation" id="asterisk-wildcard-exp">
+                                    <div class="explanation-title"><i class="fas fa-info-circle"></i> Asterisk Wildcard</div>
+                                    <p>Matches any number (zero or more) of characters. Used within quotes to find variations.</p>
+                                    <div class="explanation-example">Example: "govern*s" finds governors, governments, governs</div>
+                                    <div class="explanation-example">Example: "a * saved is a * earned" finds variations of the saying</div>
+                                    <div class="explanation-example">Example: "how to * quora" finds "how to use quora", "how to post on quora", etc.</div>
+                                </div>
+                                <div class="wildcard-preview">
+                                    <strong>Preview:</strong> <span id="asterisk-preview">Enter a pattern to see preview</span>
+                                </div>
+                            </div>
+                            
+                            <div id="wildcard-question" class="wildcard-input" style="display: none;">
+                                <label for="question-wildcard">Question Mark Wildcard (? matches a single character)</label>
+                                <div class="input-with-info">
+                                    <input type="text" id="question-wildcard" placeholder="e.g., wom?n or te?t">
+                                    <i class="fas fa-info-circle info-icon" onclick="toggleExplanation('question-wildcard-exp')"></i>
+                                </div>
+                                <div class="operator-explanation" id="question-wildcard-exp">
+                                    <div class="explanation-title"><i class="fas fa-info-circle"></i> Question Mark Wildcard</div>
+                                    <p>Matches any single character at the position of the question mark.</p>
+                                    <div class="explanation-example">Example: wom?n finds woman, women</div>
+                                    <div class="explanation-example">Example: te?t finds text, test</div>
+                                    <div class="explanation-example">Example: sm?th finds smith, smyth</div>
+                                    <p class="tip">Note: Google doesn't directly support the ? wildcard in regular search, but this helps you construct patterns for other search systems.</p>
+                                </div>
+                                <div class="wildcard-preview">
+                                    <strong>Preview:</strong> <span id="question-preview">Enter a pattern to see preview</span>
+                                </div>
+                            </div>
+                            
+                            <div id="wildcard-brackets" class="wildcard-input" style="display: none;">
+                                <label for="brackets-wildcard">Brackets Wildcard ([] matches any character in set)</label>
+                                <div class="input-with-info">
+                                    <input type="text" id="brackets-wildcard" placeholder='e.g., b[ae]ll or gr[ae]y'>
+                                    <i class="fas fa-info-circle info-icon" onclick="toggleExplanation('brackets-wildcard-exp')"></i>
+                                </div>
+                                <div class="operator-explanation" id="brackets-wildcard-exp">
+                                    <div class="explanation-title"><i class="fas fa-info-circle"></i> Brackets Wildcard</div>
+                                    <p>Matches any single character within the brackets. You can also use ranges like [a-z] or [0-9].</p>
+                                    <div class="explanation-example">Example: b[ae]ll finds ball, bell</div>
+                                    <div class="explanation-example">Example: gr[ae]y finds gray, grey</div>
+                                    <div class="explanation-example">Example: [0-9] matches any single digit</div>
+                                    <div class="explanation-example">Example: countr[yies] finds country or countries</div>
+                                    <p class="tip">Note: Google doesn't directly support the [] wildcard in regular search, but this helps you construct patterns for other search systems.</p>
+                                </div>
+                                <div class="wildcard-preview">
+                                    <strong>Preview:</strong> <span id="brackets-preview">Enter a pattern to see preview</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <div class="section-title">
+                            <span><i class="fas fa-globe"></i> Site & URL Based Operators</span>
+                            <i class="fas fa-info-circle info-icon" onclick="showOperatorInfo('site')"></i>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="site">Restrict to Site/Domain</label>
+                            <div class="input-with-info">
+                                <input type="text" id="site" placeholder="e.g., github.com or .gov">
+                                <i class="fas fa-info-circle info-icon" onclick="toggleExplanation('site-exp')"></i>
+                            </div>
+                            <div class="operator-explanation" id="site-exp">
+                                <div class="explanation-title"><i class="fas fa-info-circle"></i> Site Operator</div>
+                                <p>Restricts results to a specific website or domain.</p>
+                                <div class="explanation-example">Example: site:github.com python API finds Python API information only on GitHub</div>
+                                <div class="explanation-example">Example: site:.gov climate report finds climate reports only on government websites</div>
+                                <div class="explanation-example">Example: site:edu machine learning finds machine learning content only on educational websites</div>
+                            </div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="intitle">Word in Title (intitle:)</label>
+                            <div class="input-with-info">
+                                <input type="text" id="intitle" placeholder="e.g., index of">
+                                <i class="fas fa-info-circle info-icon" onclick="toggleExplanation('intitle-exp')"></i>
+                            </div>
+                            <div class="operator-explanation" id="intitle-exp">
+                                <div class="explanation-title"><i class="fas fa-info-circle"></i> Intitle Operator</div>
+                                <p>Finds pages whose HTML title tag contains the specified word.</p>
+                                <div class="explanation-example">Example: intitle:"index of" database finds directory listings with "database" in the title</div>
+                                <div class="explanation-example">Example: intitle:resume software engineer finds resumes of software engineers</div>
+                            </div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="inurl">Word in URL (inurl:)</label>
+                            <div class="input-with-info">
+                                <input type="text" id="inurl" placeholder="e.g., blog">
+                                <i class="fas fa-info-circle info-icon" onclick="toggleExplanation('inurl-exp')"></i>
+                            </div>
+                            <div class="operator-explanation" id="inurl-exp">
+                                <div class="explanation-title"><i class="fas fa-info-circle"></i> Inurl Operator</div>
+                                <p>Finds pages whose URL contains the specified word.</p>
+                                <div class="explanation-example">Example: inurl:blog travel tips finds travel tip pages with "blog" in the URL</div>
+                                <div class="explanation-example">Example: inurl:download python finds Python download pages</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="section">
+                        <div class="section-title">
+                            <span><i class="fas fa-file-alt"></i> File Type & Content Operators</span>
+                            <i class="fas fa-info-circle info-icon" onclick="showOperatorInfo('file')"></i>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="filetype">File Type</label>
+                            <div class="input-with-info">
+                                <select id="filetype">
+                                    <option value="">None selected</option>
+                                    <option value="pdf">PDF</option>
+                                    <option value="ppt">PowerPoint (PPT)</option>
+                                    <option value="doc">Word Document (DOC)</option>
+                                    <option value="xls">Excel (XLS)</option>
+                                    <option value="txt">Text (TXT)</option>
+                                    <option value="zip">Zip Archive</option>
+                                </select>
+                                <i class="fas fa-info-circle info-icon" onclick="toggleExplanation('filetype-exp')"></i>
+                            </div>
+                            <div class="operator-explanation" id="filetype-exp">
+                                <div class="explanation-title"><i class="fas fa-info-circle"></i> Filetype Operator</div>
+                                <p>Finds specific file types. Extremely powerful for research.</p>
+                                <div class="explanation-example">Example: filetype:pdf neural networks finds PDF documents about neural networks</div>
+                                <div class="explanation-example">Example: ext:ppt marketing strategy finds PowerPoint presentations about marketing strategy</div>
+                                <div class="explanation-example">Example: filetype:doc resume template finds Word document resume templates</div>
+                                <p><strong>Common filetypes:</strong> pdf, ppt, pptx, doc, docx, xls, xlsx, txt, rtf, zip</p>
+                            </div>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="related">Related Sites</label>
+                            <div class="input-with-info">
+                                <input type="text" id="related" placeholder="e.g., reddit.com">
+                                <i class="fas fa-info-circle info-icon" onclick="toggleExplanation('related-exp')"></i>
+                            </div>
+                            <div class="operator-explanation" id="related-exp">
+                                <div class="explanation-title"><i class="fas fa-info-circle"></i> Related Operator</div>
+                                <p>Finds sites similar to a given site.</p>
+                                <div class="explanation-example">Example: related:reddit.com finds forums similar to Reddit</div>
+                                <div class="explanation-example">Example: related:github.com finds code repository sites similar to GitHub</div>
+                                <div class="explanation-example">Example: related:amazon.com finds e-commerce sites similar to Amazon</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="tip">
+                        <i class="fas fa-lightbulb"></i> <strong>Tip:</strong> Click on the <i class="fas fa-info-circle"></i> icons next to each field to see detailed explanations and examples of each search operator.
+                    </div>
+                </div>
+                
+                <div class="preview-sidebar">
+                    <div class="search-preview">
+                        <h2><i class="fas fa-rocket"></i> Search Preview</h2>
+                        
+                        <div class="search-engine-selector">
+                            <label>Select Search Engine for Preview</label>
+                            <div class="search-engine-grid" id="search-engine-grid">
+                                <!-- Search engine buttons will be added here by JavaScript -->
+                            </div>
+                            
+                            <div class="search-engine-info" id="engine-info">
+                                <div id="engine-description"></div>
+                                <div class="engine-features" id="engine-features"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="preview-box">
+                            <div class="query-display" id="query-display">
+                                Your search query will appear here...
+                            </div>
+                        </div>
+                        
+                        <div class="buttons">
+                            <button class="reset-btn" id="reset-btn">
+                                <i class="fas fa-redo"></i> Reset
+                            </button>
+                            <button class="search-btn" id="search-btn">
+                                <i class="fas fa-search"></i> Search on <span id="selected-engine-name">Google</span>
+                            </button>
+                        </div>
+                        
+                        <button class="all-search-btn-quick" id="all-search-btn">
+                            <i class="fas fa-external-link-alt"></i> Open All Search Engines (12 Tabs)
+                        </button>
+                    </div>
+                    
+                    <div class="operator-guide">
+                        <h2><i class="fas fa-book"></i> Operator Quick Guide</h2>
+                        
+                        <div class="guide-item">
+                            <div class="guide-operator">"exact phrase"</div>
+                            <div class="guide-desc">Find pages containing this exact phrase in this exact order</div>
+                            <div class="guide-example">"to be or not to be"</div>
+                        </div>
+                        
+                        <div class="guide-item">
+                            <div class="guide-operator">OR (or |)</div>
+                            <div class="guide-desc">Find pages containing either word/phrase</div>
+                            <div class="guide-example">java OR python tutorial</div>
+                        </div>
+                        
+                        <div class="guide-item">
+                            <div class="guide-operator">- (minus sign)</div>
+                            <div class="guide-desc">Exclude a term from results</div>
+                            <div class="guide-example">jaguar speed -car</div>
+                        </div>
+                        
+                        <div class="guide-item">
+                            <div class="guide-operator">site:</div>
+                            <div class="guide-desc">Restrict results to a specific website or domain</div>
+                            <div class="guide-example">site:github.com python API</div>
+                        </div>
+                        
+                        <div class="guide-item">
+                            <div class="guide-operator">filetype:</div>
+                            <div class="guide-desc">Find specific file types</div>
+                            <div class="guide-example">filetype:pdf neural networks</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Operator Info Modal -->
+    <div id="operator-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Operator Information</h3>
+                <span class="close-modal" onclick="closeModal()">&times;</span>
+            </div>
+            <div id="modal-content">
+                <!-- Content will be loaded here -->
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+    <p>SearchCraft &copy; 2023 | Search across  different search engines</p>
+    <p>Note: Advanced operator support varies by search engine. Google has the most comprehensive support.</p>
+    </footer>
+
+    <script>
+        // Search Engines Data
+        const searchEngines = [
+            {
+                id: 'google',
+                name: 'Google',
+                icon: 'fab fa-google',
+                color: '#4285F4',
+                url: 'https://www.google.com/search?q=',
+                description: 'The most popular search engine with comprehensive advanced operator support.',
+                features: {
+                    exactPhrase: 'supported',
+                    orOperator: 'supported',
+                    exclude: 'supported',
+                    wildcard: 'supported',
+                    site: 'supported',
+                    intitle: 'supported',
+                    filetype: 'supported'
+                }
+            },
+            {
+                id: 'bing',
+                name: 'Bing',
+                icon: 'fab fa-microsoft',
+                color: '#008373',
+                url: 'https://www.bing.com/search?q=',
+                description: 'Microsoft\'s search engine with good advanced operator support.',
+                features: {
+                    exactPhrase: 'supported',
+                    orOperator: 'supported',
+                    exclude: 'supported',
+                    wildcard: 'partial',
+                    site: 'supported',
+                    intitle: 'supported',
+                    filetype: 'supported'
+                }
+            },
+            {
+                id: 'duckduckgo',
+                name: 'DuckDuckGo',
+                icon: 'fab fa-duckduckgo',
+                color: '#DE5833',
+                url: 'https://duckduckgo.com/?q=',
+                description: 'Privacy-focused search engine that doesn\'t track you.',
+                features: {
+                    exactPhrase: 'supported',
+                    orOperator: 'supported',
+                    exclude: 'supported',
+                    wildcard: 'partial',
+                    site: 'supported',
+                    intitle: 'supported',
+                    filetype: 'partial'
+                }
+            },
+            {
+                id: 'yahoo',
+                name: 'Yahoo',
+                icon: 'fab fa-yahoo',
+                color: '#6001D2',
+                url: 'https://search.yahoo.com/search?p=',
+                description: 'One of the original search engines, powered by Bing.',
+                features: {
+                    exactPhrase: 'supported',
+                    orOperator: 'supported',
+                    exclude: 'supported',
+                    wildcard: 'partial',
+                    site: 'supported',
+                    intitle: 'supported',
+                    filetype: 'partial'
+                }
+            },
+            {
+                id: 'baidu',
+                name: 'Baidu',
+                icon: 'fas fa-search',
+                color: '#2319DC',
+                url: 'https://www.baidu.com/s?wd=',
+                description: 'The dominant search engine in China.',
+                features: {
+                    exactPhrase: 'supported',
+                    orOperator: 'partial',
+                    exclude: 'supported',
+                    wildcard: 'partial',
+                    site: 'supported',
+                    intitle: 'partial',
+                    filetype: 'partial'
+                }
+            },
+            {
+                id: 'yandex',
+                name: 'Yandex',
+                icon: 'fab fa-yandex',
+                color: '#FF0000',
+                url: 'https://yandex.com/search/?text=',
+                description: 'The most popular search engine in Russia.',
+                features: {
+                    exactPhrase: 'supported',
+                    orOperator: 'partial',
+                    exclude: 'supported',
+                    wildcard: 'partial',
+                    site: 'supported',
+                    intitle: 'partial',
+                    filetype: 'partial'
+                }
+            },
+            {
+                id: 'brave',
+                name: 'Brave',
+                icon: 'fas fa-shield-alt',
+                color: '#FB542B',
+                url: 'https://search.brave.com/search?q=',
+                description: 'Privacy-focused search engine from the makers of Brave browser.',
+                features: {
+                    exactPhrase: 'supported',
+                    orOperator: 'supported',
+                    exclude: 'supported',
+                    wildcard: 'partial',
+                    site: 'supported',
+                    intitle: 'partial',
+                    filetype: 'partial'
+                }
+            },
+            {
+                id: 'startpage',
+                name: 'Startpage',
+                icon: 'fas fa-user-shield',
+                color: '#2F4F4F',
+                url: 'https://www.startpage.com/do/dsearch?query=',
+                description: 'Privacy search engine that shows Google results.',
+                features: {
+                    exactPhrase: 'supported',
+                    orOperator: 'supported',
+                    exclude: 'supported',
+                    wildcard: 'partial',
+                    site: 'supported',
+                    intitle: 'partial',
+                    filetype: 'partial'
+                }
+            },
+            {
+                id: 'ecosia',
+                name: 'Ecosia',
+                icon: 'fas fa-leaf',
+                color: '#45B753',
+                url: 'https://www.ecosia.org/search?q=',
+                description: 'Search engine that uses its profits to plant trees.',
+                features: {
+                    exactPhrase: 'supported',
+                    orOperator: 'supported',
+                    exclude: 'supported',
+                    wildcard: 'partial',
+                    site: 'supported',
+                    intitle: 'partial',
+                    filetype: 'partial'
+                }
+            },
+            {
+                id: 'ask',
+                name: 'Ask',
+                icon: 'far fa-question-circle',
+                color: '#D21919',
+                url: 'https://www.ask.com/web?q=',
+                description: 'Question-answer focused search engine.',
+                features: {
+                    exactPhrase: 'supported',
+                    orOperator: 'partial',
+                    exclude: 'supported',
+                    wildcard: 'unsupported',
+                    site: 'partial',
+                    intitle: 'unsupported',
+                    filetype: 'unsupported'
+                }
+            },
+            {
+                id: 'aol',
+                name: 'AOL',
+                icon: 'fas fa-search',
+                color: '#3399FF',
+                url: 'https://search.aol.com/aol/search?q=',
+                description: 'One of the original internet portals, powered by Verizon Media.',
+                features: {
+                    exactPhrase: 'supported',
+                    orOperator: 'partial',
+                    exclude: 'supported',
+                    wildcard: 'partial',
+                    site: 'partial',
+                    intitle: 'partial',
+                    filetype: 'partial'
+                }
+            },
+            {
+                id: 'swisscows',
+                name: 'Swisscows',
+                icon: 'fas fa-cow',
+                color: '#FF6600',
+                url: 'https://swisscows.com/web?query=',
+                description: 'Privacy-focused search engine based in Switzerland.',
+                features: {
+                    exactPhrase: 'supported',
+                    orOperator: 'partial',
+                    exclude: 'supported',
+                    wildcard: 'unsupported',
+                    site: 'partial',
+                    intitle: 'unsupported',
+                    filetype: 'unsupported'
+                }
+            }
+        ];
+
+        // Default selected engine
+        let selectedEngine = searchEngines[0];
+        
+        // Get all input elements
+        const inputs = document.querySelectorAll('input, select');
+        const queryDisplay = document.getElementById('query-display');
+        const resetBtn = document.getElementById('reset-btn');
+        const searchBtn = document.getElementById('search-btn');
+        const allSearchBtn = document.getElementById('all-search-btn');
+        const modal = document.getElementById('operator-modal');
+        const searchEngineGrid = document.getElementById('search-engine-grid');
+        const engineInfo = document.getElementById('engine-info');
+        const engineDescription = document.getElementById('engine-description');
+        const engineFeatures = document.getElementById('engine-features');
+        const selectedEngineName = document.getElementById('selected-engine-name');
+        const mainSearchInput = document.getElementById('main-search-input');
+        const quickAllSearchBtn = document.getElementById('quick-all-search-btn');
+        const quickSearchEngineButtons = document.getElementById('quick-search-engine-buttons');
+        const switchToNormalBtn = document.getElementById('switch-to-normal');
+        
+        // Tab functionality
+        function initTabs() {
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tabId = btn.getAttribute('data-tab');
+                    
+                    // Update active tab button
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    // Show corresponding tab content
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                    
+                    // If switching to advanced tab, update the query display
+                    if (tabId === 'advanced-search') {
+                        updateQueryDisplay();
+                    }
+                    
+                    // If switching to normal tab, sync the main search input with the normal search input
+                    if (tabId === 'normal-search') {
+                        mainSearchInput.value = document.getElementById('normal-search').value;
+                    }
+                });
+            });
+            
+            // Switch to normal button in advanced tab
+            switchToNormalBtn.addEventListener('click', () => {
+                tabBtns.forEach(b => b.classList.remove('active'));
+                document.querySelector('[data-tab="normal-search"]').classList.add('active');
+                
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById('normal-search-tab').classList.add('active');
+            });
+            
+            // Sync main search input with normal search input when typing
+            mainSearchInput.addEventListener('input', () => {
+                document.getElementById('normal-search').value = mainSearchInput.value;
+            });
+        }
+        
+        // Initialize search engine grid for quick search
+        function initializeQuickSearchEngines() {
+            searchEngines.forEach(engine => {
+                const engineBtn = document.createElement('div');
+                engineBtn.className = 'engine-btn-quick';
+                engineBtn.setAttribute('data-engine-id', engine.id);
+                
+                engineBtn.innerHTML = `
+                    <div class="engine-icon-quick">
+                        <i class="${engine.icon}"></i>
+                    </div>
+                    <div class="engine-name-quick">${engine.name}</div>
+                `;
+                
+                engineBtn.addEventListener('click', () => {
+                    performQuickSearch(engine);
+                });
+                
+                quickSearchEngineButtons.appendChild(engineBtn);
+            });
+        }
+        
+        // Perform quick search on a specific engine
+        function performQuickSearch(engine) {
+            const searchTerms = mainSearchInput.value.trim();
+            if (!searchTerms) {
+                alert('Please enter search terms');
+                mainSearchInput.focus();
+                return;
+            }
+            
+            const encodedQuery = encodeURIComponent(searchTerms);
+            const searchUrl = `${engine.url}${encodedQuery}`;
+            window.open(searchUrl, '_blank');
+        }
+        
+        // Initialize search engine grid for advanced search
+        function initializeSearchEngines() {
+            searchEngines.forEach(engine => {
+                const engineBtn = document.createElement('div');
+                engineBtn.className = 'engine-btn-quick';
+                engineBtn.setAttribute('data-engine-id', engine.id);
+                if (engine.id === 'google') {
+                    engineBtn.classList.add('active');
+                }
+                
+                engineBtn.innerHTML = `
+                    <div class="engine-icon-quick">
+                        <i class="${engine.icon}"></i>
+                    </div>
+                    <div class="engine-name-quick">${engine.name}</div>
+                `;
+                
+                engineBtn.addEventListener('click', () => {
+                    // Update active button
+                    document.querySelectorAll('#search-engine-grid .engine-btn-quick').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    engineBtn.classList.add('active');
+                    
+                    // Update selected engine
+                    selectedEngine = engine;
+                    selectedEngineName.textContent = engine.name;
+                    
+                    // Update engine info
+                    updateEngineInfo();
+                    
+                    // Update query display
+                    updateQueryDisplay();
+                });
+                
+                searchEngineGrid.appendChild(engineBtn);
+            });
+            
+            // Initialize engine info
+            updateEngineInfo();
+        }
+        
+        // Update engine info display
+        function updateEngineInfo() {
+            engineDescription.textContent = selectedEngine.description;
+            engineFeatures.innerHTML = '';
+            
+            const features = selectedEngine.features;
+            for (const [feature, status] of Object.entries(features)) {
+                const featureName = feature === 'exactPhrase' ? 'Exact Phrase' :
+                                  feature === 'orOperator' ? 'OR Operator' :
+                                  feature === 'exclude' ? 'Exclude' :
+                                  feature === 'wildcard' ? 'Wildcard' :
+                                  feature === 'site' ? 'Site:' :
+                                  feature === 'intitle' ? 'Intitle:' :
+                                  feature === 'filetype' ? 'Filetype:' : feature;
+                
+                const featureTag = document.createElement('span');
+                featureTag.className = `feature-tag ${status}`;
+                featureTag.textContent = `${featureName}: ${status}`;
+                engineFeatures.appendChild(featureTag);
+            }
+            
+            engineInfo.classList.add('active');
+        }
+        
+        // Wildcard type selector
+        const wildcardButtons = document.querySelectorAll('.wildcard-btn');
+        const wildcardInputs = document.querySelectorAll('.wildcard-input');
+        
+        // Initialize query display
+        updateQueryDisplay();
+        
+        // Add event listeners to all inputs
+        inputs.forEach(input => {
+            input.addEventListener('input', updateQueryDisplay);
+        });
+        
+        // Set up wildcard type selector
+        wildcardButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const type = this.getAttribute('data-type');
+                
+                // Update active button
+                wildcardButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show corresponding input
+                wildcardInputs.forEach(input => {
+                    input.style.display = 'none';
+                });
+                document.getElementById(`wildcard-${type}`).style.display = 'block';
+                
+                updateQueryDisplay();
+            });
+        });
+        
+        // Add event listeners to wildcard inputs for preview
+        document.getElementById('asterisk-wildcard').addEventListener('input', updateWildcardPreview);
+        document.getElementById('question-wildcard').addEventListener('input', updateWildcardPreview);
+        document.getElementById('brackets-wildcard').addEventListener('input', updateWildcardPreview);
+        
+        // Function to toggle explanation visibility
+        function toggleExplanation(id) {
+            const explanation = document.getElementById(id);
+            explanation.classList.toggle('active');
+        }
+        
+        // Function to show operator info modal
+        function showOperatorInfo(type) {
+            let title = '';
+            let content = '';
+            
+            if (type === 'term') {
+                title = 'Term-Level Operators';
+                content = `
+                    <h4>Refining Keywords</h4>
+                    <div class="wildcard-options">
+                        <div>
+                            <h5>"exact phrase"</h5>
+                            <p>Use quotes to find pages containing this exact phrase in this exact order.</p>
+                            <div class="explanation-example">"to be or not to be"</div>
+                        </div>
+                        <div>
+                            <h5>OR (or |)</h5>
+                            <p>Find pages containing either word/phrase. Must be uppercase OR.</p>
+                            <div class="explanation-example">java OR python tutorial</div>
+                        </div>
+                        <div>
+                            <h5>- (minus sign)</h5>
+                            <p>Exclude a term from results.</p>
+                            <div class="explanation-example">jaguar speed -car</div>
+                        </div>
+                        <div>
+                            <h5>* (asterisk)</h5>
+                            <p>A wildcard that matches any word or phrase. Great for finding lyrics, quotes, or formulas.</p>
+                            <div class="explanation-example">"a * saved is a * earned"</div>
+                        </div>
+                    </div>
+                `;
+            } else if (type === 'site') {
+                title = 'Site & URL Based Operators';
+                content = `
+                    <div class="wildcard-options">
+                        <div>
+                            <h5>site:</h5>
+                            <p>Restrict results to a specific website or domain.</p>
+                            <div class="explanation-example">site:github.com python API</div>
+                        </div>
+                        <div>
+                            <h5>inurl:</h5>
+                            <p>Find pages whose URL contains the specified word.</p>
+                            <div class="explanation-example">inurl:blog travel tips</div>
+                        </div>
+                        <div>
+                            <h5>intitle:</h5>
+                            <p>Find pages whose HTML title tag contains the word.</p>
+                            <div class="explanation-example">intitle:"index of" database</div>
+                        </div>
+                        <div>
+                            <h5>intext:</h5>
+                            <p>Find pages where the body text contains the word.</p>
+                            <div class="explanation-example">intext:"traditional recipe" pasta</div>
+                        </div>
+                    </div>
+                `;
+            } else if (type === 'file') {
+                title = 'File Type & Content Operators';
+                content = `
+                    <div class="wildcard-options">
+                        <div>
+                            <h5>filetype: or ext:</h5>
+                            <p>Find specific file types. This is extremely powerful for research.</p>
+                            <div class="explanation-example">filetype:pdf neural networks</div>
+                            <div class="explanation-example">ext:ppt marketing strategy</div>
+                            <p><strong>Common filetypes:</strong> pdf, ppt, pptx, doc, docx, xls, xlsx, txt, rtf, zip</p>
+                        </div>
+                        <div>
+                            <h5>related:</h5>
+                            <p>Find sites similar to a given site.</p>
+                            <div class="explanation-example">related:reddit.com</div>
+                        </div>
+                        <div>
+                            <h5>cache:</h5>
+                            <p>View the version of a page that Google stored in its cache.</p>
+                            <div class="explanation-example">cache:example.com/page</div>
+                        </div>
+                        <div>
+                            <h5>define:</h5>
+                            <p>Get a quick dictionary definition.</p>
+                            <div class="explanation-example">define:ephemeral</div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-content').innerHTML = content;
+            modal.style.display = 'block';
+        }
+        
+        // Function to close modal
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        };
+        
+        // Function to update wildcard preview
+        function updateWildcardPreview() {
+            const activeBtn = document.querySelector('.wildcard-btn.active');
+            const type = activeBtn.getAttribute('data-type');
+            
+            if (type === 'asterisk') {
+                const value = document.getElementById('asterisk-wildcard').value.trim();
+                if (value) {
+                    // Add quotes for asterisk wildcards if not already there
+                    const displayValue = value.includes('*') && !value.startsWith('"') ? `"${value}"` : value;
+                    document.getElementById('asterisk-preview').textContent = `${displayValue} (matches: ${value.replace(/\*/g, 'ANY_TEXT')})`;
+                } else {
+                    document.getElementById('asterisk-preview').textContent = 'Enter a pattern to see preview';
+                }
+            } else if (type === 'question') {
+                const value = document.getElementById('question-wildcard').value.trim();
+                if (value) {
+                    document.getElementById('question-preview').textContent = `${value} (matches: ${value.replace(/\?/g, 'ANY_CHAR')})`;
+                } else {
+                    document.getElementById('question-preview').textContent = 'Enter a pattern to see preview';
+                }
+            } else if (type === 'brackets') {
+                const value = document.getElementById('brackets-wildcard').value.trim();
+                if (value) {
+                    document.getElementById('brackets-preview').textContent = `${value} (matches characters in brackets)`;
+                } else {
+                    document.getElementById('brackets-preview').textContent = 'Enter a pattern to see preview';
+                }
+            }
+        }
+        
+        // Function to update the query display
+        function updateQueryDisplay() {
+            let queryParts = [];
+            
+            // Get normal search terms
+            const normalSearch = document.getElementById('normal-search').value.trim();
+            if (normalSearch) {
+                // Split by spaces and add each word separately
+                const terms = normalSearch.split(' ').filter(term => term.trim());
+                queryParts.push(...terms);
+            }
+            
+            // Get values from advanced inputs
+            const exactPhrase = document.getElementById('exact-phrase').value.trim();
+            const orTerms = document.getElementById('or-terms').value.trim();
+            const excludeTerms = document.getElementById('exclude-terms').value.trim();
+            
+            // Get active wildcard type and value
+            const activeBtn = document.querySelector('.wildcard-btn.active');
+            const wildcardType = activeBtn.getAttribute('data-type');
+            let wildcardValue = '';
+            
+            if (wildcardType === 'asterisk') {
+                wildcardValue = document.getElementById('asterisk-wildcard').value.trim();
+            } else if (wildcardType === 'question') {
+                wildcardValue = document.getElementById('question-wildcard').value.trim();
+            } else if (wildcardType === 'brackets') {
+                wildcardValue = document.getElementById('brackets-wildcard').value.trim();
+            }
+            
+            const site = document.getElementById('site').value.trim();
+            const inurl = document.getElementById('inurl').value.trim();
+            const intitle = document.getElementById('intitle').value.trim();
+            const filetype = document.getElementById('filetype').value;
+            const related = document.getElementById('related').value.trim();
+            
+            // Build advanced query parts
+            if (exactPhrase) queryParts.push(`"${exactPhrase}"`);
+            
+            if (orTerms) {
+                const orArray = orTerms.split(',').map(term => term.trim()).filter(term => term);
+                if (orArray.length > 0) {
+                    queryParts.push(`(${orArray.join(' OR ')})`);
+                }
+            }
+            
+            if (excludeTerms) {
+                const excludeArray = excludeTerms.split(',').map(term => term.trim()).filter(term => term);
+                excludeArray.forEach(term => {
+                    queryParts.push(`-${term}`);
+                });
+            }
+            
+            // Handle wildcard based on type
+            if (wildcardValue) {
+                if (wildcardType === 'asterisk') {
+                    // For asterisk, add quotes if not already there
+                    const formattedValue = wildcardValue.includes('*') && !wildcardValue.startsWith('"') ? `"${wildcardValue}"` : wildcardValue;
+                    queryParts.push(formattedValue);
+                } else if (wildcardType === 'question') {
+                    // Most search engines don't support ? wildcard, so we'll use it as a literal
+                    queryParts.push(`${wildcardValue}`);
+                } else if (wildcardType === 'brackets') {
+                    // Most search engines don't support [] wildcard, so we'll use it as a literal
+                    queryParts.push(`${wildcardValue}`);
+                }
+            }
+            
+            if (site) queryParts.push(`site:${site}`);
+            if (inurl) queryParts.push(`inurl:${inurl}`);
+            if (intitle) queryParts.push(`intitle:${intitle}`);
+            if (filetype) queryParts.push(`filetype:${filetype}`);
+            if (related) queryParts.push(`related:${related}`);
+            
+            // Update wildcard preview
+            updateWildcardPreview();
+            
+            // Update the display
+            if (queryParts.length > 0) {
+                queryDisplay.innerHTML = queryParts.map(part => {
+                    // Check if this part is an operator
+                    const isOperator = part.includes(':') || part.startsWith('"') || part.startsWith('-') || part.includes('OR') || part.startsWith('(');
+                    if (isOperator) {
+                        return `<span class="operator-tag">${part}</span>`;
+                    } else {
+                        return part;
+                    }
+                }).join(' ');
+            } else {
+                queryDisplay.textContent = 'Your search query will appear here...';
+            }
+        }
+        
+        // Function to build the search URL for a specific engine
+        function buildSearchUrl(engine) {
+            let queryParts = [];
+            
+            // Get normal search terms
+            const normalSearch = document.getElementById('normal-search').value.trim();
+            if (normalSearch) {
+                // Split by spaces and add each word separately
+                const terms = normalSearch.split(' ').filter(term => term.trim());
+                queryParts.push(...terms.map(term => encodeURIComponent(term)));
+            }
+            
+            // Get values from advanced inputs
+            const exactPhrase = document.getElementById('exact-phrase').value.trim();
+            const orTerms = document.getElementById('or-terms').value.trim();
+            const excludeTerms = document.getElementById('exclude-terms').value.trim();
+            
+            // Get active wildcard type and value
+            const activeBtn = document.querySelector('.wildcard-btn.active');
+            const wildcardType = activeBtn.getAttribute('data-type');
+            let wildcardValue = '';
+            
+            if (wildcardType === 'asterisk') {
+                wildcardValue = document.getElementById('asterisk-wildcard').value.trim();
+            } else if (wildcardType === 'question') {
+                wildcardValue = document.getElementById('question-wildcard').value.trim();
+            } else if (wildcardType === 'brackets') {
+                wildcardValue = document.getElementById('brackets-wildcard').value.trim();
+            }
+            
+            const site = document.getElementById('site').value.trim();
+            const inurl = document.getElementById('inurl').value.trim();
+            const intitle = document.getElementById('intitle').value.trim();
+            const filetype = document.getElementById('filetype').value;
+            const related = document.getElementById('related').value.trim();
+            
+            // Build advanced query parts
+            if (exactPhrase) queryParts.push(`"${encodeURIComponent(exactPhrase)}"`);
+            
+            if (orTerms) {
+                const orArray = orTerms.split(',').map(term => term.trim()).filter(term => term);
+                if (orArray.length > 0) {
+                    queryParts.push(`(${orArray.map(term => encodeURIComponent(term)).join(' OR ')})`);
+                }
+            }
+            
+            if (excludeTerms) {
+                const excludeArray = excludeTerms.split(',').map(term => term.trim()).filter(term => term);
+                excludeArray.forEach(term => {
+                    queryParts.push(`-${encodeURIComponent(term)}`);
+                });
+            }
+            
+            // Handle wildcard - only asterisk is supported by most search engines in quotes
+            if (wildcardValue) {
+                if (wildcardType === 'asterisk') {
+                    // Add quotes for asterisk wildcards
+                    queryParts.push(`"${encodeURIComponent(wildcardValue)}"`);
+                } else {
+                    // For other wildcards, just add as regular text (most search engines don't support them)
+                    queryParts.push(encodeURIComponent(wildcardValue));
+                }
+            }
+            
+            if (site) queryParts.push(`site:${encodeURIComponent(site)}`);
+            if (inurl) queryParts.push(`inurl:${encodeURIComponent(inurl)}`);
+            if (intitle) queryParts.push(`intitle:${encodeURIComponent(intitle)}`);
+            if (filetype) queryParts.push(`filetype:${encodeURIComponent(filetype)}`);
+            if (related) queryParts.push(`related:${encodeURIComponent(related)}`);
+            
+            // Join all parts and create the URL
+            const queryString = queryParts.join('+');
+            return `${engine.url}${queryString}`;
+        }
+        
+        // Reset button functionality
+        resetBtn.addEventListener('click', function() {
+            inputs.forEach(input => {
+                if (input.type === 'text' || input.type === 'url' || input.type === 'number') {
+                    input.value = '';
+                } else if (input.type === 'select-one') {
+                    input.selectedIndex = 0;
+                }
+            });
+            
+            // Reset main search input
+            mainSearchInput.value = '';
+            
+            // Reset wildcard to asterisk type
+            wildcardButtons.forEach(btn => btn.classList.remove('active'));
+            document.querySelector('[data-type="asterisk"]').classList.add('active');
+            wildcardInputs.forEach(input => {
+                input.style.display = 'none';
+            });
+            document.getElementById('wildcard-asterisk').style.display = 'block';
+            
+            // Close all explanations
+            document.querySelectorAll('.operator-explanation').forEach(exp => {
+                exp.classList.remove('active');
+            });
+            
+            updateQueryDisplay();
+        });
+        
+        // Search button functionality (for selected engine in advanced tab)
+        searchBtn.addEventListener('click', function() {
+            const searchUrl = buildSearchUrl(selectedEngine);
+            window.open(searchUrl, '_blank');
+        });
+        
+        // All search engines button functionality for quick search
+        quickAllSearchBtn.addEventListener('click', function() {
+            const searchTerms = mainSearchInput.value.trim();
+            if (!searchTerms) {
+                alert('Please enter search terms');
+                mainSearchInput.focus();
+                return;
+            }
+            
+            const encodedQuery = encodeURIComponent(searchTerms);
+            // Open each search engine in a new tab
+            searchEngines.forEach(engine => {
+                const searchUrl = `${engine.url}${encodedQuery}`;
+                window.open(searchUrl, '_blank');
+            });
+        });
+        
+        // All search engines button functionality for advanced search
+        allSearchBtn.addEventListener('click', function() {
+            // Open each search engine in a new tab
+            searchEngines.forEach(engine => {
+                const searchUrl = buildSearchUrl(engine);
+                window.open(searchUrl, '_blank');
+            });
+        });
+        
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initTabs();
+            initializeQuickSearchEngines();
+            initializeSearchEngines();
+            
+            // Enable pressing Enter in main search input
+            mainSearchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    // Use Google by default for quick search
+                    const googleEngine = searchEngines.find(engine => engine.id === 'google');
+                    performQuickSearch(googleEngine);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
