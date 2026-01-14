@@ -1,51 +1,41 @@
-SearchCraft
-A unified interface for simple and advanced search across 12 different search engines
+# SearchCraft
+**A unified interface for simple and advanced search across 12 different search engines**
 
-https://img.shields.io/badge/Live-Demo-brightgreen
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://mayar-ibrahim.yoo7.com/h1-page)
 
-Live Demo: https://mayar-ibrahim.yoo7.com/h1-page
+click to view live Demo.
+or use the link: https://mayar-ibrahim.yoo7.com/h1-page
 
-
-https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white
-https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white
-https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black
+made with:
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=flat&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=flat&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)
 
 SearchCraft is a powerful, intuitive web application that lets you perform both simple searches and build complex search queries across 12 different search engines from a single interface.
 
-**✨ Features**
+## ✨ Features
 
-        🔍 Dual Interface Mode
-        Simple Search: Clean, Google-like interface for quick searches
-        
-        Advanced Search: Full control with advanced search operators and filters
-        
-        🚀 Multi-Engine Support
-        Search across 12 different search engines:
-        
-        Privacy Focused: DuckDuckGo, Brave, Startpage, Swisscows
-        
-        Major Engines: Google, Bing, Yahoo, Baidu, Yandex
-        
-        Specialized: Ecosia (plants trees), Ask (Q&A), AOL
-        
-        ⚡ Advanced Search Operators
-        Term-Level: Exact phrases, OR operations, exclusions, wildcards
-        
-        Site/URL Based: Restrict to domains, search within titles/URLs
-        
-        File Type: Filter by PDF, DOC, PPT, TXT, ZIP and more
-        
-        Wildcards: Asterisk (*), question mark (?), brackets []
+### 🔍 **Dual Interface Mode**
+- **Simple Search**: Clean, Google-like interface for quick searches
+- **Advanced Search**: Full control with advanced search operators and filters
 
-**🎯 Smart Features**
+### 🚀 **Multi-Engine Support**
+Search across 12 different search engines:
+- **Privacy Focused**: DuckDuckGo, Brave, Startpage, Swisscows
+- **Major Engines**: Google, Bing, Yahoo, Baidu, Yandex
+- **Specialized**: Ecosia (plants trees), Ask (Q&A), AOL
 
-      Live Query Preview: See your constructed query in real-time
-      
-      Engine Compatibility Info: Know which engines support which operators
-      
-      One-Click Multi-Search: Open your query in all 12 engines simultaneously
-      
-      Operator Explanations: In-line help with examples for each operator
+### ⚡ **Advanced Search Operators**
+- **Term-Level**: Exact phrases, OR operations, exclusions, wildcards
+- **Site/URL Based**: Restrict to domains, search within titles/URLs
+- **File Type**: Filter by PDF, DOC, PPT, TXT, ZIP and more
+- **Wildcards**: Asterisk (*), question mark (?), brackets []
+
+### 🎯 **Smart Features**
+- **Live Query Preview**: See your constructed query in real-time
+- **Engine Compatibility Info**: Know which engines support which operators
+- **One-Click Multi-Search**: Open your query in all 12 engines simultaneously
+- **Operator Explanations**: In-line help with examples for each operator
 
 **🚀 Quick Start**
 
